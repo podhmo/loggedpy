@@ -33,5 +33,6 @@ setup(
     entry_points="""
 [console_scripts]
 loggedpy = loggedpy.app:main
+loggedpy-cat = loggedpy._cat:main
 """
 )
