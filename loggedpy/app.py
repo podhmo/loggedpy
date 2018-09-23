@@ -6,7 +6,7 @@ from loggedpy import (
 
 def main():
     import argparse
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument("filepath", nargs="?")
     parser.add_argument("-m", "--python-module")
     parser.add_argument("--loggedpy-driver", default=":Driver")
