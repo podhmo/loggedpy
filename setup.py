@@ -31,5 +31,7 @@ setup(
     install_requires=install_requires,
     test_suite="loggedpy.tests",
     entry_points="""
+[console_scripts]
+loggedpy = loggedpy.app:main
 """
 )

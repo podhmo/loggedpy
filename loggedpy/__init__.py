@@ -7,6 +7,7 @@ from importlib.util import (
     spec_from_file_location,
     find_spec,
 )
+from unittest import mock
 from functools import partial
 import shutil
 import logging
@@ -43,7 +44,7 @@ def patch(logger, name="info"):
             return bool(record.msg.strip())
 
     logger.addFilter(SuppressEmptyStringFilter())
-    sys.modules["builtins"].print = partial(print, file=Wrapper(logger, {}), end="")
+    return mock.patch("builtins.print", partial(print, file=Wrapper(logger, {}), end=""))
 
 
 def get_driver(path) -> Driver:  # using protocol (types)
@@ -73,15 +74,15 @@ def run(
         spec = find_spec(python_module)
         sys.argv[1:] = args
         driver.setup(level=logging.DEBUG)  # xxx
-        patch(driver.get_logger(spec.name))
-        return SourceFileLoader("__main__", spec.origin).load_module()
+        with patch(driver.get_logger(spec.name)):
+            return SourceFileLoader("__main__", spec.origin).load_module()
     elif os.path.exists(filepath) and not os.path.isdir(filepath):
         # for: python <file>
         spec = spec_from_file_location("__main__", filepath)
         sys.argv[1:] = args
         driver.setup(level=logging.DEBUG)  # xxx
-        patch(driver.get_logger(spec.name))
-        return SourceFileLoader("__main__", spec.origin).load_module()
+        with patch(driver.get_logger(spec.name)):
+            return SourceFileLoader("__main__", spec.origin).load_module()
     else:
         # for: <command>
         cmdpath = shutil.which(filepath)
@@ -90,5 +91,5 @@ def run(
 
         sys.argv[1:] = args
         driver.setup(level=logging.DEBUG)  # xxx
-        patch(driver.get_logger(os.path.basename(cmdpath)))
-        return SourceFileLoader("__main__", cmdpath).load_module()
+        with patch(driver.get_logger(os.path.basename(cmdpath))):
+            return SourceFileLoader("__main__", cmdpath).load_module()
