@@ -89,7 +89,7 @@ def run(
         if not cmdpath:
             raise RuntimeError(f"not supported: {sys.argv}")
 
-        sys.argv[1:] = args
+        sys.argv = [filepath, *args]
         driver.setup(level=logging.DEBUG)  # xxx
         with patch(driver.get_logger(os.path.basename(cmdpath))):
             return SourceFileLoader("__main__", cmdpath).load_module()
