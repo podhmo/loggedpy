@@ -43,7 +43,10 @@ def patch(logger, name="info"):
         def filter(self, record):
             return bool(record.msg.strip())
 
-    logger.addFilter(SuppressEmptyStringFilter())
+    internal = logger
+    while hasattr(internal, "logger"):
+        internal = internal.logger
+    internal.addFilter(SuppressEmptyStringFilter())
     return mock.patch("builtins.print", partial(print, file=Wrapper(logger, {}), end=""))
 
 
