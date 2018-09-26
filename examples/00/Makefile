@@ -7,11 +7,11 @@
 03:
 	loggedpy -m tokenize customized.py
 04:
-	loggedpy --loggedpy-driver=./customized.py:Driver 00*.py
+	loggedpy --flavor=./customized.py:Flavor 00*.py
 05:
-	loggedpy --loggedpy-driver=./customized.py:Driver 01*.py
+	loggedpy --flavor=./customized.py:Flavor 01*.py
 06:
-	loggedpy --loggedpy-driver=./customized.py:Driver loggedpy-cat customized.py
+	loggedpy --flavor=./customized.py:Flavor loggedpy-cat customized.py
 07:
-	loggedpy --loggedpy-driver=./customized.py:Driver -m tokenize customized.py
+	loggedpy --flavor=./customized.py:Flavor -m tokenize customized.py
 

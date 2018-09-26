@@ -1,5 +1,5 @@
 ```console
-$ loggedpy --loggedpy-driver=./customized.py:Driver hello.py
+$ loggedpy --flavor=./customized.py:Flavor hello.py
 {
   "logger": "__main__",
   "levelname": "INFO",

@@ -13,7 +13,7 @@ import shutil
 import logging
 
 
-class Driver:
+class Flavor:
     format = "%(levelname)s\t%(asctime)s\t%(message)s"
     out = sys.stderr
     level = logging.INFO
@@ -50,7 +50,7 @@ def patch(logger, name="info"):
     return mock.patch("builtins.print", partial(print, file=Wrapper(logger, {}), end=""))
 
 
-def get_driver(path) -> Driver:  # using protocol (types)
+def get_flavor(path) -> Flavor:  # using protocol (types)
     if path.startswith(":"):
         return globals()[path[1:]]()
     else:
@@ -64,7 +64,7 @@ def get_driver(path) -> Driver:  # using protocol (types)
 
 
 def run(
-    driver: Driver,  # using protocol (types)
+    flavor: Flavor,  # using protocol (types)
     *,
     filepath: t.Optional[str],
     python_module: t.Optional[str],
@@ -76,15 +76,15 @@ def run(
             args.insert(0, filepath)
         spec = find_spec(python_module)
         sys.argv[1:] = args
-        driver.setup(level=logging.DEBUG)  # xxx
-        with patch(driver.get_logger(spec.name)):
+        flavor.setup(level=logging.DEBUG)  # xxx
+        with patch(flavor.get_logger(spec.name)):
             return SourceFileLoader("__main__", spec.origin).load_module()
     elif os.path.exists(filepath) and not os.path.isdir(filepath):
         # for: python <file>
         spec = spec_from_file_location("__main__", filepath)
         sys.argv[1:] = args
-        driver.setup(level=logging.DEBUG)  # xxx
-        with patch(driver.get_logger(spec.name)):
+        flavor.setup(level=logging.DEBUG)  # xxx
+        with patch(flavor.get_logger(spec.name)):
             return SourceFileLoader("__main__", spec.origin).load_module()
     else:
         # for: <command>
@@ -93,6 +93,6 @@ def run(
             raise RuntimeError(f"not supported: {sys.argv}")
 
         sys.argv = [filepath, *args]
-        driver.setup(level=logging.DEBUG)  # xxx
-        with patch(driver.get_logger(os.path.basename(cmdpath))):
+        flavor.setup(level=logging.DEBUG)  # xxx
+        with patch(flavor.get_logger(os.path.basename(cmdpath))):
             return SourceFileLoader("__main__", cmdpath).load_module()

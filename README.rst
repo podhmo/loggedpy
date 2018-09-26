@@ -28,7 +28,7 @@ customization
 
 .. code:: console
 
-  $ loggedpy --loggedpy-driver=./customized.py:Driver hello.py
+  $ loggedpy --flavor=./customized.py:Flavor hello.py
   INFO	2018-09-24 01:09:12,691	__main__	in	hello.py:2	main	hello hello
   INFO	2018-09-24 01:09:12,691	__main__	in	hello.py:3	main	bye
 
@@ -40,7 +40,7 @@ customized.py
   import loggedpy
 
 
-  class Driver(loggedpy.Driver):
+  class Flavor(loggedpy.Flavor):
       format = "%(levelname)s\t%(asctime)s\t%(name)s\tin\t%(filename)s:%(lineno)s\t%(funcName)s\t%(message)s"
       level = logging.DEBUG
 
@@ -58,7 +58,7 @@ support external command
   if __name__ == "__main__":
       main()
 
-  $ loggedpy --loggedpy-driver=./customized.py:Driver loggedpy-cat hello.py
+  $ loggedpy --flavor=./customized.py:Flavor loggedpy-cat hello.py
   INFO	2018-09-24 01:12:21,568	loggedpy-cat	in	_cat.py:8	main	def main():
   INFO	2018-09-24 01:12:21,568	loggedpy-cat	in	_cat.py:8	main	    print("hello hello")
   INFO	2018-09-24 01:12:21,568	loggedpy-cat	in	_cat.py:8	main	    print("bye")
@@ -71,7 +71,7 @@ support `-m`
 
 .. code:: console
 
-  $ loggedpy -m tokenize --loggedpy-driver=./customized.py:Driver hello.py
+  $ loggedpy -m tokenize --flavor=./customized.py:Flavor hello.py
   INFO	2018-09-24 01:10:39,418	tokenize	in	tokenize.py:708	main	0,0-0,0:            ENCODING       'utf-8'        
   INFO	2018-09-24 01:10:39,418	tokenize	in	tokenize.py:708	main	1,0-1,3:            NAME           'def'          
   INFO	2018-09-24 01:10:39,418	tokenize	in	tokenize.py:708	main	1,4-1,8:            NAME           'main'         

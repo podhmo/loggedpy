@@ -1,4 +1,4 @@
 00:
-	loggedpy --loggedpy-driver=./customized.py:Driver hello.py
+	loggedpy --flavor=./customized.py:Flavor hello.py
 01:
-	loggedpy --loggedpy-driver=./customized.py:Driver -m tokenize hello.py
+	loggedpy --flavor=./customized.py:Flavor -m tokenize hello.py
